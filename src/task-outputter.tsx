@@ -1,9 +1,14 @@
 import { addTask, type Task } from './entities/task.js';
-import { sortByDate } from './utils/task-filter.js';
+import { sortByDate } from './utils/task-sort-list.js';
 import { isValidTaskTitle, normalizeTitle } from './utils/validation.js';
 import { styled } from '@mui/material/styles';
 // import { theme } from './styles/theme';
 // import React from 'react';
+
+type TaskItemProps = {
+    task: Task;
+    onRemove: (id: string) => void;
+};
 
 const tasks: Task[] = [
     addTask('react    hfyfhtf'),
@@ -24,7 +29,8 @@ const BlockTask = styled('div')(({ theme }) => ({
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',    
-    minHeight: '10vh',         
+    minHeight: '10vh',  
+    minWidth: '120vh',       
     textAlign: 'left', 
     marginBottom: theme.spacing(2),
     border: '1px solid #e0e0e0',
@@ -54,25 +60,11 @@ export function TasksOutput() {
         {displayTasks.map((task, idx) => (
             <BlockTask key={idx}>
                 <TitleTask>{task.title}</TitleTask>
-                <CreateTask>{task.create instanceof Date ? task.create.toLocaleString() : String(task.create)}</CreateTask>
+                <CreateTask>{task.created instanceof Date ? task.created.toLocaleString() : String(task.created)}</CreateTask>
+                {/* <StyledButton onClick={() => props.onRemove(props.task.id)}>x</StyledButton> */}
             </BlockTask>
         ))}
         </>
     );
 }
 
-// export function TasksOutput() {
-//     const displayTasks = sortByDate(sortedTasks);
-//     return (
-//         <div>
-//             <h2>Список задач</h2>
-//                 {displayTasks.map((task, idx) => (
-//                     <div key={idx} style={{marginBottom: '1em'}}>
-//                         <div><b>Title:</b> {task.title}</div>
-//                         <div><b>Created At:</b> {task.create instanceof Date ? task.create.toLocaleString() : String(task.create)}</div>
-//                         <div><b>Completed:</b> {task.complete ? 'Yes' : 'No'}</div>
-//                     </div>
-//                 ))}
-//         </div>
-//     );
-// }
