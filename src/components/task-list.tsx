@@ -1,16 +1,16 @@
 import { TaskItem } from "./task-item";
 import type { Task } from "../entities/task";
-import { sortByDate } from '../utils/task-sort-list.js';
+// import { sortByDate } from '../utils/task-sort-list.js';
 import { styled } from "@mui/material/styles";
-
 
 type TaskListProps = {
   tasks: Task[];
-  onAdd: (task: string) => void;
   onRemove: (id: string) => void;
-}
+  onEdit: (task:Task) => void;
+  onToggle: (id: string) => void;
+};
 
-const ListDiv = styled("div")(({ theme }) => ({
+const ListDiv = styled("div")(() => ({
   display: "flex",
   justifyContent: 'flex-start',
   fontSize: '20px',
@@ -18,18 +18,22 @@ const ListDiv = styled("div")(({ theme }) => ({
 }));
 
  export function TaskList(props: TaskListProps) {
-    const displayTasks = sortByDate(props.tasks);
-    const result = displayTasks.map(task => (
-    <TaskItem key={task.id} task={task} onRemove={props.onRemove} onAdd={props.onAdd} />
-  ));
+   const result = props.tasks.map(task => (
+    <TaskItem 
+      key={task.id}
+      task={task} 
+      onRemove={props.onRemove}
+      onEdit={props.onEdit} 
+      onToggle={props.onToggle}/>
+    ));
 
-  const isEmpty = result.length > 0 ? result : <p>Список пуст</p>;
-  return (
-    <div>
-      <ListDiv>Список задач</ListDiv>
-        <div>{isEmpty}</div>
-    </div>
-    );
+    const isEmpty = result.length > 0 ? result : <p>Список пуст</p>;
+    return (
+      <div>
+        <ListDiv>Список задач</ListDiv>
+          <div>{isEmpty}</div>
+      </div>
+      );
  } 
 
   

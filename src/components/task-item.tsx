@@ -2,18 +2,13 @@
 import type {Task} from '../entities/task';
 import { styled } from '@mui/material/styles';
 import { normalizeTitle } from '../utils/validation';
+import { useState } from 'react';
+// import { EditInput } from './edit-input';
 
 
 
-type TaskItemProps = {
-    task: Task;
-    onAdd: (task: string) => void;
-    onRemove: (id: string) => void;
 
-};
-
-
-const StyledButton = styled('span')(({theme}) => ({
+const StyledButton = styled('span')(({}) => ({
     color: 'red',
     border: 'none',
     cursor: 'pointer',
@@ -23,13 +18,13 @@ const StyledButton = styled('span')(({theme}) => ({
 
 
 
-const ChangeButton = styled('span')(({theme}) => ({
-color: 'green',
-border: 'none',
-cursor: 'pointer',
-padding: theme.spacing(1),
-background: 'transparent',
-transition: 'all 0.2s ease-in-out',
+const ChangeButton = styled('span')(({ theme }) => ({
+    color: 'green',
+    border: 'none',
+    cursor: 'pointer',
+    padding: theme.spacing(1),
+    background: 'transparent',
+    transition: 'all 0.2s ease-in-out',
 }));
 
 const BlockTask = styled('div')(({ theme }) => ({
@@ -37,10 +32,10 @@ const BlockTask = styled('div')(({ theme }) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     background: '#ffffffff',
-    padding: theme.spacing(2), 
-    minHeight: '10vh',  
-    minWidth: '120vh',       
-    textAlign: 'left', 
+    padding: theme.spacing(2),
+    minHeight: '10vh',
+    minWidth: '120vh',
+    textAlign: 'left',
     marginBottom: theme.spacing(2),
     border: '1px solid #e0e0e0',
     borderRadius: 12,
@@ -61,20 +56,58 @@ const CreateTask = styled('div')(({ theme }) => ({
     fontSize: '10px',
 }));
 
+const Description = styled('div')(({ theme }) => ({
+    background: '#ffffff00',
+    padding: theme.spacing(1),
+    color: 'black',
+    fontSize: '13px',
+}));
 
+const Ellipsis = styled('span')(({ theme }) => ({
+    cursor: 'pointer',
+    marginLeft: theme.spacing(1),
+    color: 'black',
+    fontWeight: 600,
+}));
+
+const Title = styled('span')<{ complete: boolean }>(({ theme, complete }) => ({
+    cursor: 'pointer',
+    marginLeft: theme.spacing(1),
+    color: complete ? 'grey' : 'black',
+    textDecoration: complete ? 'line-through' : 'none',
+    fontWeight: 600,
+}));
+
+
+type TaskItemProps = {
+    task: Task;
+    onRemove: (id: string) => void;
+    onEdit: (task: Task) => void;
+    onToggle: (id: string) => void;
+};
 
 export function TaskItem(props: TaskItemProps) {
+    const [showDesc, setShowDesc] = useState(false);
+    
+
     return (
             <BlockTask key={props.task.id}>
-                <div >
-                    <TitleTask>{normalizeTitle(props.task.title)}</TitleTask>
+                <div>
+                    <TitleTask>
+                        <Title complete= {props.task.completed} onClick={() => props.onToggle(props.task.id)}>{normalizeTitle(props.task.title)}</Title>
+                        {props.task.description !=='' && (
+                            <Ellipsis onClick={() => setShowDesc((s) => !s)}>...</Ellipsis>
+                        )}
+                    </TitleTask>
+                    {showDesc && 
+                    props.task.description && 
+                    <Description>{props.task.description}</Description>}
                     <CreateTask>{props.task.created instanceof Date ? props.task.created.toLocaleString() : String(props.task.created)}</CreateTask>
                 </div>
                 <div>
-                   <ChangeButton onClick={() => props.onAdd(props.task.id)}>=</ChangeButton>
-                    <StyledButton onClick={() => props.onRemove(props.task.id)}>x</StyledButton>
+                    <ChangeButton onClick={() => props.onEdit(props.task)} >&#9998;</ChangeButton>
+                    <StyledButton onClick={() => props.onRemove(props.task.id)}>&#10006;</StyledButton>
                 </div>
-                {/* <StyledButton onClick={() => props.onRemove(props.task.id)}>x</StyledButton> */}
             </BlockTask>
     );
 }

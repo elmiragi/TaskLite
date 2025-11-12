@@ -1,5 +1,5 @@
 
-import { getRandomId, getRandomDate } from '../utils/id.js';
+import { getRandomId} from '../utils/id.js';
 
 export type Task = {
     readonly id: string,
@@ -7,6 +7,7 @@ export type Task = {
     created: Date,
     description?: string,
     completed: boolean,
+    deadline?: Date | null,
 }
 
 // Наименование функций в came/case
@@ -16,9 +17,9 @@ export function addTask(title: string): Task {
     return {
     id: getRandomId(),
     title,
-    created: new Date(Date.now() + getRandomDate()*1000),
-    description: 'lorem',
+    created: new Date(Date.now()),
+    description: '',
     completed: false,
-
+    deadline: null,
     }
 }

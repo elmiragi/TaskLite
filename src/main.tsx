@@ -7,6 +7,5 @@ import {App} from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
-    {/* <Title title='learn world' text='lorem' user="Elmira"/> */}
   </StrictMode>,
 )
