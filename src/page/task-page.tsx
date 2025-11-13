@@ -79,6 +79,7 @@ export function TaskPage() {
   const [isEditingTask, setIsEditingTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]> (() => loadTasks());
   const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
   const [sortByDate, setSortByDate] = useState<'new' | 'old'>('new');
   useEffect(() => {
     saveTask(tasks);
@@ -120,6 +121,9 @@ export function TaskPage() {
     });
 
 
+  const searchedTasks = filterTask.filter(t => {
+    return t.title.includes(search)
+  })
   const total = tasks.length;
   const completed = tasks.filter(t => t.completed).length;
   const percent = total !==  0 ? Math.round((completed / total) * 100) : 0;
@@ -128,6 +132,7 @@ export function TaskPage() {
     <>
       <Wrapper>
         <TaskInput onAdd={handleAddTask}/>
+        <input value={search} onChange= {(e) => setSearch(e.target.value)} type='text'></input>
         <AboutCompleted>
           <AllSortBtn>
             <ShowButton active={filter === 'all'} onClick={() => setFilter('all')}>Все</ShowButton>
@@ -142,7 +147,7 @@ export function TaskPage() {
       
         <TaskReady percent={percent} />
         <TaskList 
-        tasks={filterTask} 
+        tasks={searchedTasks} 
         onEdit={(task) => setIsEditingTask(task)} 
         onToggle={handleToggleTask}
         onRemove={handleRemoveTask}/>
