@@ -88,6 +88,15 @@ const EditButton = styled("div")(({ theme }) => ({
     padding: theme.spacing(2),
 }));
 
+const DeadlineBox = styled("input")(({ theme }) => ({
+    backgroundColor: "#fff",
+    color: "#000",
+    margin: theme.spacing(1),
+    border: "1px solid #e0e0e0",
+    borderRadius: 10,
+    padding: theme.spacing(2),
+    colorScheme: 'light',
+}));
 
 type TaskModalProps = {
     task: Task;
@@ -117,11 +126,11 @@ export function TaskModal(props:TaskModalProps) {
                     <NewInput value={title} type='text' onChange={(e) => setTitle(e.target.value)}></NewInput>
                     <NewTextarea value={description} placeholder='Описание' onChange={(e) => setDescription(e.target.value)}></NewTextarea>
                     <div>
-                        deadline:
-                        <input value={deadline}
+                        Дедлайн:
+                        <DeadlineBox value={deadline}
                         onChange={(e) => setDeadline(e.target.value)}
                         type='date'
-                        ></input>
+                        ></DeadlineBox>
                     </div>
                 </NextDiv>
                 <EditButton>

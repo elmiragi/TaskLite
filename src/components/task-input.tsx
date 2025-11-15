@@ -16,14 +16,14 @@ const InputRow = styled("div")(({ theme }) => ({
   alignItems: "center",
 }));
 
-const TextInput = styled("input")(() => ({
+const TextInput = styled("input")(({ theme }) => ({
   flex: 1,
   height: 44,
   backgroundColor: "#fff",
   color: "#000",
   border: "1px solid #e0e0e0",
   borderRadius: 12,
-  padding: "0 16px",
+  padding: theme.spacing(1.5, 2.5),
   outline: "none",
   boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)",
   "::placeholder": {

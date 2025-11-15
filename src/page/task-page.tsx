@@ -55,6 +55,13 @@ const ClearButton = styled('button')(({ theme }) => ({
   border: '2px dashed #967fc4',
   borderRadius: 8,
   cursor: 'pointer',
+  ':disabled': {
+    border: '2px dashed #ddd',
+    color: '#aaa',
+    cursor: 'not-allowed',
+    background: '#f5f5f5',
+    opacity: 0.8,
+  }
 }));
 
 
@@ -72,6 +79,22 @@ const SortDateChoose = styled('select')(({ theme }) => ({
   padding: theme.spacing(0, 0.5),
   fontWeight: 600,
   borderRadius: 4,
+}));
+
+const SearchInput = styled("input")(({theme}) => ({
+  height: 44,
+  backgroundColor: "#fff",
+  color: "#000",
+  margin: theme.spacing(1),
+  border: "1px solid #e0e0e0",
+  borderRadius: 10,
+  padding: theme.spacing(1.5, 2.5),
+  outline: "none",
+  width: '100%',
+  boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)",
+  "::placeholder": {
+    color: "#9e9e9e",
+  },
 }));
 
 export function TaskPage() {
@@ -121,8 +144,12 @@ export function TaskPage() {
     });
 
 
+  const normalize = (s: string) => s.trim().replace(/\s+/g, ' ').toLowerCase();
+  const q = normalize(search);
   const searchedTasks = filterTask.filter(t => {
-    return t.title.includes(search)
+    if (!q) return true;
+    const title = normalize(t.title);
+    return title.includes(q);
   })
   const total = tasks.length;
   const completed = tasks.filter(t => t.completed).length;
@@ -132,7 +159,7 @@ export function TaskPage() {
     <>
       <Wrapper>
         <TaskInput onAdd={handleAddTask}/>
-        <input value={search} onChange= {(e) => setSearch(e.target.value)} type='text'></input>
+        <SearchInput placeholder="Поиск задач..." value={search} onChange= {(e) => setSearch(e.target.value)} type='text'></SearchInput>
         <AboutCompleted>
           <AllSortBtn>
             <ShowButton active={filter === 'all'} onClick={() => setFilter('all')}>Все</ShowButton>
@@ -154,7 +181,7 @@ export function TaskPage() {
         
           <ControlsRow>
             <div>Всего: {total} | Активных: {active} | Выполненных: {completed}</div>
-            <ClearButton onClick={() => setTasks(tasks.filter(t => !t.completed))}>Очистить выполненные</ClearButton>
+            <ClearButton disabled={completed === 0} onClick={() => setTasks(tasks.filter(t => !t.completed))}>Очистить выполненные</ClearButton>
           </ControlsRow>
         {isEditingTask && (
           <TaskModal task={isEditingTask} onClose={() => setIsEditingTask(null)} onSave={handleEditTask}/>
